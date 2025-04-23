@@ -13,7 +13,7 @@ from openpyxl.styles import PatternFill
 from datetime import datetime
 import csv
 #добавить эксельку в проект и сюда закинуть путь до нее
-data = pd.read_excel('/content/Задание_2_Потребление_электроэнергии_Апрель.xlsx', header=1)
+data = pd.read_excel("Задание_2_Потребление_электроэнергии_Апрель.xlsx", header=1)
 
 min_consumption = 10
 tariff = 0.2;
