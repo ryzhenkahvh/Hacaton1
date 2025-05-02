@@ -1,7 +1,11 @@
+from pathlib import Path
+
 from aiogram import F, Router, types
 #from aiogram.types import Message
 from aiogram.filters import  CommandStart
 from app.keyboards import kb, kb2, kb_remove, start_kb
+from aiogram.types import FSInputFile
+
 
 last_report = {}
 router = Router()
@@ -19,10 +23,18 @@ async def start_command(message: types.Message):
 async def launch_bot(message: types.Message):
     await message.reply("Выберите дальнейшие действия:", reply_markup=kb)
 
+
 @router.message(F.text == "🚀 Запуск работы")
 async def start_work(message: types.Message):
-    last_report[message.from_user.id] = "Отчет1"
-    await message.reply("Отчет1", reply_markup=kb2)
+    # Указываем путь к существующему файлу
+    file_path = Path("backend/analyzed_marked.xlsx")
+
+    # Отправляем файл
+    await message.reply_document(
+        document=FSInputFile(file_path),
+        caption="Ваш отчет готов:",
+        reply_markup=kb2
+    )
 
 @router.message(F.text == "⏸️ Приостановка работы")
 async def pause_work(message: types.Message):

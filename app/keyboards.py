@@ -12,7 +12,8 @@ start_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='🚀 Запуст
 
 kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='🚀 Запуск работы')],
                                       [KeyboardButton(text='⏸️ Приостановка работы')],
-                                      [KeyboardButton(text='⚙️ Настройки')]],
+                                      [KeyboardButton(text='⚙️ Настройки')],
+                                      [KeyboardButton(text='💵Ввести сумму')]],
                            resize_keyboard=True,
                            input_field_placeholder='Выберите интересующую опцию...')
 
