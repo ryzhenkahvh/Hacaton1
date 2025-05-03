@@ -177,7 +177,10 @@ print(days_consumption)
 
 #ДИАГРАММА ВРЕМЯ
 plt.figure(figsize=(14, 7))
-plt.plot(grouped_result.index.astype(str), grouped_result['Суммарное'], label="Потребление", marker='o', color='#1f77b4', linewidth=2)
+plt.plot(resized_sum.index.astype(str), resized_sum['Суммарное'], label="Потребление", marker='o', color='#1f77b4', linewidth=2)
+# plt.plot(grouped_result.index.astype(str), grouped_result['Суммарное'], label="Потребление", marker='o', color='#1f77b4', linewidth=2)
+
+
 # plt.plot(grouped_result.index.astype(str), grouped_result['Среднее'], label="Среднее", marker='o', color='#1f77b4', linewidth=2)
 #######################################################################################################################
 # plt.plot(hourly_redistributed.index.astype(str), hourly_redistributed.values,
