@@ -37,17 +37,19 @@ difference = sum - opt_sum
 total_diff = total_sum - total_opt_sum
 diff_price = total_diff * tariff
 
+#ПОИСК ПИКОВ
 opt_nan = optimization.mask(optimization == 0)
 opt_mean = opt_nan.mean()
 std_deviation = opt_nan.std()
-n_std = 1.4
+n_std = 1.5
 min_peak_height = opt_mean.fillna(0) + n_std * std_deviation.fillna(0)
 
 peaks = optimization.where(
     optimization > min_peak_height[optimization.columns]
+    # optimization > min_peak_height
 )
 peaks_with_time = pd.concat([data_time, peaks], axis=1)
-# print(peaks_with_time)
+# print(optimization.columns)
 
 #список не работающих
 low_consumption = data.iloc[:, 2:].where((data.iloc[:, 2:] > 0) & (data.iloc[:, 2:] < min_consumption))
@@ -91,6 +93,7 @@ low_consumption_with_time = pd.concat([
 
 # redistributed_dips = pd.concat([data_time, redistributed_dips], axis=1)
 
+#СОЗДАНИЕ КРАШЕНОЙ ЭКСЕЛЬ
 copy_data = data.copy()
 temp_file = "temp_output.xlsx"
 copy_data.to_excel(temp_file, index=False, engine='openpyxl')
@@ -164,8 +167,9 @@ resized_sum = grouped.apply(
 top_peaks_mean = grouped_result.nlargest(5, ('Среднее')).loc[:, ['Среднее']]
 top_peaks_sum = resized_sum.nlargest(5, ('Суммарное'))
 
-# print(top_peaks_sum)
+print(top_peaks_sum)
 
+#ДАТЫ
 date_sum = data.iloc[:, 2:].sum(axis=1)
 date_max = data.iloc[:, 2:].max(axis=1)
 first_date_column = data.iloc[:, 0]
@@ -223,6 +227,7 @@ print(days_consumption)
 # plt.savefig('consumption_by_time.png')
 # plt.show()
 
+#ДИАГРАММА СТОЛБЦАМИ ПОТРЕБЛЕНИЯ ПО ВРЕМЕНИ
 plt.figure(figsize=(14, 7))
 # Создаем столбчатую диаграмму вместо линейного графика
 bars = plt.bar(resized_sum.index.astype(str), resized_sum['Суммарное'],
@@ -261,6 +266,7 @@ plt.show()
 # plt.savefig('consumption_by_days.png')
 # plt.show()
 
+#СТОЛБЧАТАЯ ДИАГРАММА ДНЕЙ
 plt.figure(figsize=(14, 7))
 # Создаем столбчатую диаграмму
 bars = plt.bar(days_consumption.index, days_consumption['Суммарное'],
@@ -288,8 +294,7 @@ plt.tight_layout()
 plt.savefig('consumption_by_days.png', dpi=300, bbox_inches='tight')
 plt.show()
 
-
-
+#СОЗДАНИЕ ЭКСЕЛЬ ПО ВРЕМЕНИ И CSV ПИКОВ
 with pd.ExcelWriter('time_analysis.xlsx') as writer:
     grouped_result.to_excel(writer, sheet_name='Потребление по временным интервалам', float_format="%.2f")
     days_consumption.to_excel(writer, sheet_name='Потребление по дням', float_format="%.2f")
@@ -315,6 +320,7 @@ with open('time_peaks_report.csv', 'w', encoding='utf-8-sig') as f:
     writer = csv.writer(f, delimiter=';')
     writer.writerows(report_data)
 
+#БАЗОВОЕ CSV, ТАРИФЫ
 #эту же информацию можно добавить в сообщение тг, тк здесь перечислено главное
 report_lines = [
     ["Дата создания", datetime.now().strftime('%Y-%m-%d %H:%M:%S')],
